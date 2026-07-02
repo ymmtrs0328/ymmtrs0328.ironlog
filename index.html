@@ -15,7 +15,7 @@
     :root{--bg:#0f0f0f;--bg2:#1a1a1a;--bg3:#242424;--bg4:#2e2e2e;--border:#2e2e2e;--accent:#f97316;--a2:#fb923c;--text:#f0f0f0;--t2:#aaa;--t3:#666;--green:#4ade80;--red:#f87171;--yellow:#fbbf24;--blue:#60a5fa;--purple:#c084fc}
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
     body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;max-width:480px;margin:0 auto;overflow-x:hidden}
-    .hdr{background:var(--bg);border-bottom:1px solid var(--border);padding:calc(11px + env(safe-area-inset-top)) 16px 9px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between}
+    .hdr{background:var(--bg);border-bottom:1px solid var(--border);padding:calc(11px + env(safe-area-inset-top)) 16px 9px;position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:100;display:flex;align-items:center;justify-content:space-between}
     .logo{font-family:'Barlow Condensed',sans-serif;font-size:23px;font-weight:900;letter-spacing:2px;color:var(--accent);white-space:nowrap;flex-shrink:0}
     .logo span{color:var(--text)}
     .hdr-right{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;flex-shrink:0}
@@ -26,7 +26,7 @@
     .ntab{flex:1;padding:9px 2px calc(13px + env(safe-area-inset-bottom));text-align:center;color:var(--t3);cursor:pointer;border-top:2px solid transparent;transition:all .2s;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px}
     .ntab.on{color:var(--accent);border-top-color:var(--accent)}
     .ni{font-size:18px;display:block;margin-bottom:1px}
-    .pg{display:none;padding:12px 14px 88px}
+    .pg{display:none;padding:calc(56px + env(safe-area-inset-top)) 14px calc(88px + env(safe-area-inset-bottom))}
     .pg.on{display:block;animation:up .2s ease}
     /* ── BODY tab ── */
     .msmt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
@@ -55,7 +55,20 @@
     body.theme-purple{--accent:#a855f7;--a2:#c084fc}
     body.theme-red{--accent:#ef4444;--a2:#f87171}
     body.theme-cyan{--accent:#06b6d4;--a2:#22d3ee}
+    body.theme-custom{--accent:var(--custom-accent,#f97316);--a2:var(--custom-a2,#fb923c)}
     .theme-grid{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+    .custom-color-section{margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+    .custom-color-label{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;margin-bottom:8px;font-family:'Barlow Condensed',sans-serif;display:block}
+    .color-picker-row{display:flex;align-items:center;gap:10px}
+    .color-picker-native{width:44px;height:36px;border:1px solid var(--border);border-radius:8px;background:var(--bg3);cursor:pointer;padding:2px;-webkit-appearance:none;appearance:none}
+    .color-picker-native::-webkit-color-swatch-wrapper{padding:0;border-radius:6px}
+    .color-picker-native::-webkit-color-swatch{border:none;border-radius:6px}
+    .color-hex-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:15px;padding:8px 12px;outline:none;letter-spacing:1px;text-transform:uppercase}
+    .color-hex-input:focus{border-color:var(--accent)}
+    .color-apply-btn{padding:8px 16px;border-radius:8px;background:var(--accent);border:none;color:#000;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:900;letter-spacing:1px;cursor:pointer;flex-shrink:0;transition:opacity .15s}
+    .color-apply-btn:active{opacity:.7}
+    .color-dot-custom{width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:transform .15s,border-color .15s;flex-shrink:0;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);position:relative;display:flex;align-items:center;justify-content:center;font-size:14px}
+    .color-dot-custom.active{border-color:#fff;transform:scale(1.15)}
     .theme-dot{width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:transform .15s,border-color .15s;flex-shrink:0}
     .theme-dot.active{border-color:#fff;transform:scale(1.15)}
     .pr-list{display:flex;flex-direction:column;gap:6px;margin-top:8px}
@@ -610,28 +623,47 @@
 
   <!-- Theme Color -->
   <div class="card">
-    <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;margin-bottom:6px">🎨 テーマカラー</div>
-    <div class="theme-grid" id="themeGrid">
-      <div class="theme-dot" data-theme="" style="background:#f97316" onclick="setTheme('')" title="オレンジ"></div>
-      <div class="theme-dot" data-theme="theme-blue" style="background:#3b82f6" onclick="setTheme('theme-blue')" title="ブルー"></div>
-      <div class="theme-dot" data-theme="theme-green" style="background:#22c55e" onclick="setTheme('theme-green')" title="グリーン"></div>
-      <div class="theme-dot" data-theme="theme-purple" style="background:#a855f7" onclick="setTheme('theme-purple')" title="パープル"></div>
-      <div class="theme-dot" data-theme="theme-red" style="background:#ef4444" onclick="setTheme('theme-red')" title="レッド"></div>
-      <div class="theme-dot" data-theme="theme-cyan" style="background:#06b6d4" onclick="setTheme('theme-cyan')" title="シアン"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px">🎨 テーマカラー</div>
+      <button onclick="toggleSection('sec-theme')" id="sec-theme-btn" style="background:none;border:none;color:var(--t3);font-size:20px;cursor:pointer;padding:0 4px;line-height:1">▾</button>
     </div>
+    <div id="sec-theme">
+      <div class="theme-grid" id="themeGrid">
+        <div class="theme-dot" data-theme="" style="background:#f97316" onclick="setTheme('')" title="オレンジ"></div>
+        <div class="theme-dot" data-theme="theme-blue" style="background:#3b82f6" onclick="setTheme('theme-blue')" title="ブルー"></div>
+        <div class="theme-dot" data-theme="theme-green" style="background:#22c55e" onclick="setTheme('theme-green')" title="グリーン"></div>
+        <div class="theme-dot" data-theme="theme-purple" style="background:#a855f7" onclick="setTheme('theme-purple')" title="パープル"></div>
+        <div class="theme-dot" data-theme="theme-red" style="background:#ef4444" onclick="setTheme('theme-red')" title="レッド"></div>
+        <div class="theme-dot" data-theme="theme-cyan" style="background:#06b6d4" onclick="setTheme('theme-cyan')" title="シアン"></div>
+        <div class="color-dot-custom" data-theme="theme-custom" id="customThemeDot" onclick="setTheme('theme-custom')" title="カスタム">✦</div>
+      </div>
+      <div class="custom-color-section">
+        <span class="custom-color-label">✦ カスタムカラー (HEX / カラーピッカー)</span>
+        <div class="color-picker-row">
+          <input type="color" class="color-picker-native" id="customColorPicker" value="#f97316" oninput="onCustomColorInput(this.value)">
+          <input type="text" class="color-hex-input" id="customColorHex" placeholder="#F97316" maxlength="7" oninput="onCustomHexInput(this.value)">
+          <button class="color-apply-btn" onclick="applyCustomColor()">適用</button>
+        </div>
+      </div>
+    </div><!-- /sec-theme -->
   </div>
 
   <!-- RM Calc -->
   <div class="card">
-    <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;margin-bottom:8px">🧮 RM換算表</div>
-    <div class="rm-input-row">
-      <input type="number" inputmode="decimal" id="rmCalcInput" placeholder="1RM (kg)" oninput="renderRMTable()">
-      <span style="color:var(--t2);font-size:12px">kg</span>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px">🧮 RM換算表</div>
+      <button onclick="toggleSection('sec-rm')" id="sec-rm-btn" style="background:none;border:none;color:var(--t3);font-size:20px;cursor:pointer;padding:0 4px;line-height:1">▾</button>
     </div>
-    <table class="rm-table" id="rmTable">
-      <tr><th>回数</th><th>重量 (kg)</th><th>強度</th><th>ゾーン</th></tr>
-      <tr><td colspan="4" style="color:var(--t3);text-align:center;padding:12px">1RMを入力してください</td></tr>
-    </table>
+    <div id="sec-rm">
+      <div class="rm-input-row">
+        <input type="number" inputmode="decimal" id="rmCalcInput" placeholder="1RM (kg)" oninput="renderRMTable()">
+        <span style="color:var(--t2);font-size:12px">kg</span>
+      </div>
+      <table class="rm-table" id="rmTable">
+        <tr><th>回数</th><th>重量 (kg)</th><th>強度</th><th>ゾーン</th></tr>
+        <tr><td colspan="4" style="color:var(--t3);text-align:center;padding:12px">1RMを入力してください</td></tr>
+      </table>
+    </div><!-- /sec-rm -->
   </div>
 
   <!-- Timer Settings -->
@@ -712,58 +744,73 @@
 
   <!-- LB ↔ KG 変換 -->
   <div class="card">
-    <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;margin-bottom:10px">⚖ LB ↔ KG 変換</div>
-    <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin-bottom:10px">
-      <input type="number" inputmode="decimal" id="lbInput" placeholder="LB" style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:9px 12px;font-size:16px;font-family:'Barlow Condensed',sans-serif;width:100%;box-sizing:border-box" oninput="convertUnit('lb')">
-      <span style="color:var(--t3);font-size:18px;text-align:center">⇄</span>
-      <input type="number" inputmode="decimal" id="kgInput" placeholder="KG" style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--accent);padding:9px 12px;font-size:16px;font-family:'Barlow Condensed',sans-serif;font-weight:700;width:100%;box-sizing:border-box" oninput="convertUnit('kg')">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px">⚖ LB ↔ KG 変換</div>
+      <button onclick="toggleSection('sec-lb')" id="sec-lb-btn" style="background:none;border:none;color:var(--t3);font-size:20px;cursor:pointer;padding:0 4px;line-height:1">▾</button>
     </div>
-    <div style="font-size:11px;color:var(--t3);margin-bottom:6px">よく使うプリセット</div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <button class="btn-s" onclick="setLbPreset(45)">45lb</button>
-      <button class="btn-s" onclick="setLbPreset(35)">35lb</button>
-      <button class="btn-s" onclick="setLbPreset(25)">25lb</button>
-      <button class="btn-s" onclick="setLbPreset(10)">10lb</button>
-      <button class="btn-s" onclick="setLbPreset(5)">5lb</button>
-      <button class="btn-s" onclick="setLbPreset(2.5)">2.5lb</button>
-    </div>
-    <div style="font-size:11px;color:var(--t3);margin:8px 0 6px">バーベルバー</div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <button class="btn-s" onclick="setLbPreset(45)">45lb bar (20.4kg)</button>
-      <button class="btn-s" onclick="setLbPreset(35)">35lb bar (15.9kg)</button>
-    </div>
+    <div id="sec-lb">
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin-bottom:10px">
+        <input type="number" inputmode="decimal" id="lbInput" placeholder="LB" style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:9px 12px;font-size:16px;font-family:'Barlow Condensed',sans-serif;width:100%;box-sizing:border-box" oninput="convertUnit('lb')">
+        <span style="color:var(--t3);font-size:18px;text-align:center">⇄</span>
+        <input type="number" inputmode="decimal" id="kgInput" placeholder="KG" style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--accent);padding:9px 12px;font-size:16px;font-family:'Barlow Condensed',sans-serif;font-weight:700;width:100%;box-sizing:border-box" oninput="convertUnit('kg')">
+      </div>
+      <div style="font-size:11px;color:var(--t3);margin-bottom:6px">よく使うプリセット</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn-s" onclick="setLbPreset(45)">45lb</button>
+        <button class="btn-s" onclick="setLbPreset(35)">35lb</button>
+        <button class="btn-s" onclick="setLbPreset(25)">25lb</button>
+        <button class="btn-s" onclick="setLbPreset(10)">10lb</button>
+        <button class="btn-s" onclick="setLbPreset(5)">5lb</button>
+        <button class="btn-s" onclick="setLbPreset(2.5)">2.5lb</button>
+      </div>
+      <div style="font-size:11px;color:var(--t3);margin:8px 0 6px">バーベルバー</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn-s" onclick="setLbPreset(45)">45lb bar (20.4kg)</button>
+        <button class="btn-s" onclick="setLbPreset(35)">35lb bar (15.9kg)</button>
+      </div>
+    </div><!-- /sec-lb -->
   </div>
 
   <!-- Plate Calculator -->
-<div class="card">
-  <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;margin-bottom:10px">🔢 プレート計算機</div>
-  <div class="frow" style="margin-bottom:8px">
-    <label class="lbl">目標重量 (kg)</label>
-    <input type="number" inputmode="decimal" id="plateTarget" placeholder="例: 100" oninput="calcPlates()">
-  </div>
-  <div class="frow" style="margin-bottom:8px">
-    <label class="lbl">バーの重さ (kg)</label>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
-      <button class="btn-s" onclick="setPlateBar(20)">20kg</button>
-      <button class="btn-s" onclick="setPlateBar(15)">15kg</button>
-      <button class="btn-s" onclick="setPlateBar(10)">10kg</button>
-      <button class="btn-s" onclick="setPlateBar(0)">0kg</button>
-    </div>
-    <input type="number" inputmode="decimal" id="plateBarWeight" value="20" oninput="calcPlates()">
-  </div>
-  <div id="plateResult" style="margin-top:6px;font-size:12px;color:var(--t3)">目標重量を入力してください</div>
-</div>
-
-<!-- Data -->
   <div class="card">
-    <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;margin-bottom:9px">データ管理</div>
-    <div class="export-btn-row">
-      <button class="btn-s" style="flex:1" onclick="exportData()">📤 JSON</button>
-      <button class="btn-s" style="flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--t2)" onclick="openImportFile()">📥 インポート</button>
-      <button class="btn-s" style="flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--t2)" onclick="exportCSV()">📊 CSV</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px">🔢 プレート計算機</div>
+      <button onclick="toggleSection('sec-plate')" id="sec-plate-btn" style="background:none;border:none;color:var(--t3);font-size:20px;cursor:pointer;padding:0 4px;line-height:1">▾</button>
     </div>
-    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
-    <div style="font-size:11px;color:var(--t3);line-height:1.6;margin-top:4px">⚠ 機種変前にバックアップを取ることをお勧めします</div>
+    <div id="sec-plate">
+      <div class="frow" style="margin-bottom:8px">
+        <label class="lbl">目標重量 (kg)</label>
+        <input type="number" inputmode="decimal" id="plateTarget" placeholder="例: 100" oninput="calcPlates()">
+      </div>
+      <div class="frow" style="margin-bottom:8px">
+        <label class="lbl">バーの重さ (kg)</label>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
+          <button class="btn-s" onclick="setPlateBar(20)">20kg</button>
+          <button class="btn-s" onclick="setPlateBar(15)">15kg</button>
+          <button class="btn-s" onclick="setPlateBar(10)">10kg</button>
+          <button class="btn-s" onclick="setPlateBar(0)">0kg</button>
+        </div>
+        <input type="number" inputmode="decimal" id="plateBarWeight" value="20" oninput="calcPlates()">
+      </div>
+      <div id="plateResult" style="margin-top:6px;font-size:12px;color:var(--t3)">目標重量を入力してください</div>
+    </div><!-- /sec-plate -->
+  </div>
+
+  <!-- Data -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px">💾 データ管理</div>
+      <button onclick="toggleSection('sec-data')" id="sec-data-btn" style="background:none;border:none;color:var(--t3);font-size:20px;cursor:pointer;padding:0 4px;line-height:1">▾</button>
+    </div>
+    <div id="sec-data">
+      <div class="export-btn-row">
+        <button class="btn-s" style="flex:1" onclick="exportData()">📤 JSON</button>
+        <button class="btn-s" style="flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--t2)" onclick="openImportFile()">📥 インポート</button>
+        <button class="btn-s" style="flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--t2)" onclick="exportCSV()">📊 CSV</button>
+      </div>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+      <div style="font-size:11px;color:var(--t3);line-height:1.6;margin-top:4px">⚠ 機種変前にバックアップを取ることをお勧めします</div>
+    </div><!-- /sec-data -->
   </div>
 
   <!-- Support -->
@@ -781,7 +828,7 @@
   </div>
 
   <!-- Credit -->
-  <div style="text-align:center;padding:20px 0 8px">
+  <div style="text-align:center;padding:20px 0 16px">
     <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;letter-spacing:3px;color:var(--accent)">IRON LOG</div>
     <div style="font-size:11px;color:var(--t3);margin-top:4px;letter-spacing:1px">v1.6</div>
     <div style="font-size:12px;color:var(--t2);margin-top:8px">Created by <span style="color:var(--accent);font-weight:700">龍青</span></div>
@@ -2555,7 +2602,7 @@ function toggleSection(id){
 }
 function initSectionStates(){
   var states=lsGet(K.secStates)||{};
-  var secs=['sec-timer','sec-badge','sec-ex','sec-grp','sec-goal'];
+  var secs=['sec-timer','sec-badge','sec-ex','sec-grp','sec-goal','sec-theme','sec-rm','sec-lb','sec-plate','sec-data'];
   secs.forEach(function(id){
     var el=document.getElementById(id);
     var btn=document.getElementById(id+'-btn');
@@ -2885,17 +2932,64 @@ function updateElapsed(){
 
 /* ── Theme ── */
 function setTheme(cls){
-  var themes=['theme-blue','theme-green','theme-purple','theme-red','theme-cyan'];
+  var themes=['theme-blue','theme-green','theme-purple','theme-red','theme-cyan','theme-custom'];
   themes.forEach(function(t){document.body.classList.remove(t);});
   if(cls&&cls.trim())document.body.classList.add(cls);
   lsSet(K.theme,cls||'');
   document.querySelectorAll('.theme-dot').forEach(function(d){
     d.classList.toggle('active',d.dataset.theme===(cls||''));
   });
+  var customDot=document.getElementById('customThemeDot');
+  if(customDot)customDot.classList.toggle('active',cls==='theme-custom');
 }
 function initTheme(){
   var t=lsGet(K.theme)||'';
+  var saved=lsGet('il5-custom-color')||'';
+  if(saved){
+    applyCustomColorValue(saved,false);
+  }
   setTheme(t);
+}
+
+/* ── Custom Color ── */
+function hexToLighten(hex){
+  var r=parseInt(hex.slice(1,3),16);
+  var g=parseInt(hex.slice(3,5),16);
+  var b=parseInt(hex.slice(5,7),16);
+  r=Math.min(255,r+40);g=Math.min(255,g+40);b=Math.min(255,b+40);
+  return '#'+[r,g,b].map(function(v){return v.toString(16).padStart(2,'0')}).join('');
+}
+function applyCustomColorValue(hex,save){
+  var light=hexToLighten(hex);
+  document.documentElement.style.setProperty('--custom-accent',hex);
+  document.documentElement.style.setProperty('--custom-a2',light);
+  var dot=document.getElementById('customThemeDot');
+  if(dot)dot.style.background=hex;
+  var picker=document.getElementById('customColorPicker');
+  if(picker)picker.value=hex;
+  var hexInput=document.getElementById('customColorHex');
+  if(hexInput)hexInput.value=hex.toUpperCase();
+  if(save)lsSet('il5-custom-color',hex);
+}
+function onCustomColorInput(hex){
+  var hexInput=document.getElementById('customColorHex');
+  if(hexInput)hexInput.value=hex.toUpperCase();
+  applyCustomColorValue(hex,false);
+}
+function onCustomHexInput(val){
+  var clean=val.trim();
+  if(!clean.startsWith('#'))clean='#'+clean;
+  var picker=document.getElementById('customColorPicker');
+  if(/^#[0-9a-fA-F]{6}$/.test(clean)){
+    if(picker)picker.value=clean;
+    applyCustomColorValue(clean,false);
+  }
+}
+function applyCustomColor(){
+  var hex=document.getElementById('customColorPicker').value;
+  applyCustomColorValue(hex,true);
+  setTheme('theme-custom');
+  showToast('カラーを適用しました ✓','#4ade80');
 }
 
 /* ── PR List ── */
